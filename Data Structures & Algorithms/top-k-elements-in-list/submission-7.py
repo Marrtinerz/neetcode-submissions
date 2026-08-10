@@ -1,6 +1,29 @@
 class Solution:
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:        
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        #using bucketsort
+
         count_dict = Counter(nums)
-        count_list = list(count_dict.items())
-        count_list.sort(reverse=True, key=lambda x: x[1])
-        return [item[0] for item in count_list[:k]]
+
+        empty_bucket = [[] for _ in range(len(nums)+1)]
+
+        for key, freq in count_dict.items():
+            empty_bucket[freq].append(key)
+
+        result = []
+        for i in range(len(nums), -1, -1):
+            if empty_bucket[i]:
+                # 2. Fix: Loop through individual elements to prevent overflowing past k
+                for num in empty_bucket[i]:
+                    result.append(num)
+                    if len(result) == k:
+                        return result
+        
+        return result
+
+
+
+
+
+        
+
+        
